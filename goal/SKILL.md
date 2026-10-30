@@ -1,0 +1,50 @@
+---
+name: goal
+description: Houdt Claude aan het werk tot een meetbare eindvoorwaarde is bereikt, naar het voorbeeld van /goal in Claude Code. Gebruik wanneer de gebruiker "/goal <voorwaarde>", "goal:", "werk door tot", "blijf bezig tot" of "keep going until" schrijft, of vraagt een taak zelfstandig af te werken met een controle aan het einde. Ook "/goal status" en "/goal clear". Niet voor losse vragen zonder duidelijk eindpunt.
+---
+
+# Goal
+
+Werk zelfstandig door tot een eindvoorwaarde aantoonbaar klopt. Claude.ai heeft geen Stop-hook en geen aparte evaluator, dus de controle doe jij zelf, streng en met bewijs.
+
+## Commando's
+
+- `/goal <voorwaarde>`: start een doel.
+- `/goal status`: toon doel, beurten gebruikt, laatste oordeel.
+- `/goal clear`: stop en vergeet het doel.
+
+## Stap 1: Doel vastleggen
+
+Herschrijf de voorwaarde in dit vaste blok en toon het kort:
+
+```
+Doel: <één meetbare eindtoestand>
+Controle: <hoe ik aantoon dat het klopt>
+Randvoorwaarden: <wat niet mag veranderen of overschreden worden>
+Max. beurten: <standaard 10>
+```
+
+Is de voorwaarde niet meetbaar ("maak het beter"), stel dan één verduidelijkende vraag en wacht. Anders ga meteen door, zonder om bevestiging te vragen.
+
+## Stap 2: Werklus
+
+Herhaal tot het doel gehaald is of het maximum bereikt is:
+
+1. **Werk**: doe de volgende concrete stap richting het doel.
+2. **Controleer**: voer de afgesproken controle echt uit (bestand openen, berekening nalopen, tekst naast de criteria leggen). Redeneer niet "het zal wel kloppen".
+3. **Oordeel** in één regel: `Beurt n/max: GEHAALD` of `NIET GEHAALD, want <ontbrekend bewijs>`.
+4. Bij NIET GEHAALD: pas de aanpak aan op basis van wat ontbrak en ga door.
+
+Beschouw het doel alleen als gehaald met zichtbaar bewijs. Noem bij GEHAALD kort welk bewijs je zag.
+
+## Stap 3: Afsluiten
+
+- **Gehaald**: resultaat eerst, dan het bewijs in maximaal drie regels.
+- **Maximum bereikt**: zeg dat het niet gehaald is, wat er wel staat, wat ontbreekt, en vraag of de gebruiker het maximum wil verhogen.
+- **Vastgelopen** (twee beurten zonder vooruitgang): stop, benoem het obstakel en vraag om input. Zet geen controle uit en verlaag het doel niet om groen te halen.
+
+## Beperkingen om te melden bij de start
+
+- Jij controleert je eigen werk, een onafhankelijke tweede beoordelaar ontbreekt. Bij belangrijke uitkomsten moet een mens het eindresultaat nalopen.
+- Het doel leeft alleen in dit gesprek. In een nieuw gesprek moet de gebruiker `/goal` opnieuw opgeven.
+- Binnen één antwoord kan Claude.ai meerdere stappen na elkaar zetten, maar loopt de lus vast op lengtelimieten, dan meld je de stand en vraagt de gebruiker "ga door".
